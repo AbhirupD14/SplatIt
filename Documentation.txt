@@ -10,4 +10,19 @@ Info on hiding internals of script that should not be accessible:
 https://stackoverflow.com/questions/36008595/how-to-design-a-library-public-api-avoiding-to-expose-internals
 
 
-Plan is to create a class that holds all the methods and expose only the method that generates the output file given the recording path
+Plan is to create a class that holds all the methods and expose only the method that generates the output file given the recording path.
+
+Day 2
+-----
+
+Working on frame extraction. Need to turn the video into a depth map to generate the point cloud from SFM. Depth map will allow 
+for mapping from 2D space to 3D space for the point cloud. 
+
+Tools for frame extraction:
+
+OpenCV
+
+Tools for depth map generation:
+
+
+
