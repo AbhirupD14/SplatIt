@@ -24,5 +24,12 @@ OpenCV
 
 Tools for depth map generation:
 
+Day 3
+-----
 
+Just researched more on point clouds and depth maps. Nothing added to code.
 
+Day 4
+-----
+
+Reseraching SfM (Structure from Motion). Looking into source videos to feed into program.
