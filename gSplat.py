@@ -1,3 +1,4 @@
+import os
 import torch
 import cv2
 import numpy as np
@@ -10,6 +11,7 @@ class GSPLAT:
         self.path = recording_path
         self.dest = destination_path
         self.blacklist = ["frame_extract","point_cloud_gen", "gaussians", "rast"]
+        self.pc = ''
     
     #Check if the method that is being used is internal or not
     #If it is internal, raise an error
@@ -19,10 +21,6 @@ class GSPLAT:
             raise AttributeError(f"{name} is not accessible!")
         else:
             return super(GSPLAT, self).__getattribute__(name)
-    
-    #Generate the point cloud
-    def point_cloud_gen(self):
-        pass
 
     #Extract frames from the video
     def frame_extract(self):
@@ -38,19 +36,34 @@ class GSPLAT:
             self.point_cloud_gen(depth_map) #Generate a point cloud for every map
         frame_data.release()
     
-    #generate a depth map from a given frame to generate a point cloud later
-    def frame_to_depth(self, frame):
-        model = torch.hub.load("intel-isl/MiDaS", "MiDaS")
+    def frame_to_depth():
+        all_frames = os.listdir('/frames')
+        depthMaps = []
+        #Check if a GPU is available, if so use it else use cpu
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        
+        # Load the MiDaS model and set to evaluation mode
+        model = torch.hub.load("intel-isl/MiDaS", "MiDaS").to(device)
         model.eval()
+        
         # Preprocessing for the model
         transform = torch.hub.load("intel-isl/MiDaS", "transforms").default_transform
-        input_img = transform(frame).unsqueeze(0)
-        with torch.no_grad():
-            prediction = model(input_img)
-        depth_map = prediction.squeeze().cpu().numpy()
-        depth_map = (depth_map - depth_map.min()) / (depth_map.max() - depth_map.min())  # Normalize
-        return depth_map
-
+        for frame in all_frames:
+            input_img = transform(frame).unsqueeze(0).to(device)
+            
+            # Make depth prediction
+            with torch.no_grad():
+                prediction = model(input_img)
+            
+            # Convert prediction to depth map and normalize
+            depth_map = prediction.squeeze().cpu().numpy()
+            depth_map = (depth_map - depth_map.min()) / (depth_map.max() - depth_map.min())  # Normalize
+            depthMaps.append(depth_map)
+        return depthMaps
+    
+    #Generate the point cloud
+    def point_cloud_gen(self, depth_map):
+        pass
     #Generate gaussian splats from the point cloud
     def gaussians(self):
         pass

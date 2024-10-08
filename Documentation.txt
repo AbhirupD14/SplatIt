@@ -23,6 +23,7 @@ Tools for frame extraction:
 OpenCV
 
 Tools for depth map generation:
+torchvision
 
 Day 3
 -----
@@ -33,3 +34,12 @@ Day 4
 -----
 
 Reseraching SfM (Structure from Motion). Looking into source videos to feed into program.
+
+Day 5
+-----
+Added code to generate depth maps. Needs revision but rough idea is there. Need to move on to generate point clouds. Main flow is as follows:
+
+First the video is taken in and a directory is created called frames. This directory will hold a jpg for each frame. The directory will be loaded into an array
+from which a depth map for each frame is generated. Each map is stored in another list which is passed to the point cloud generation function.
+The point cloud generation function will take each depth map and make point clouds, aligning them to one point cloud. This point cloud will be used 
+to generate the 3D gaussians. The gaussians will be rasterized for shape and color. This should hopefully generate the scene.
