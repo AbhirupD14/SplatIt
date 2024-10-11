@@ -43,3 +43,9 @@ First the video is taken in and a directory is created called frames. This direc
 from which a depth map for each frame is generated. Each map is stored in another list which is passed to the point cloud generation function.
 The point cloud generation function will take each depth map and make point clouds, aligning them to one point cloud. This point cloud will be used 
 to generate the 3D gaussians. The gaussians will be rasterized for shape and color. This should hopefully generate the scene.
+
+Day 6
+-----
+
+Added more code to the depth map generation method. Needs testing along with frame extraction. Should get a test video to run through 
+program soon.
