@@ -49,3 +49,10 @@ Day 6
 
 Added more code to the depth map generation method. Needs testing along with frame extraction. Should get a test video to run through 
 program soon.
+
+
+Day 7
+-----
+
+No test video yet, should be the next step before starting point cloud generation. Looking into matplotlib to visualize the depth map. Depth maps are
+all numpy arrays so matplotlib should be able to easily plot it.
