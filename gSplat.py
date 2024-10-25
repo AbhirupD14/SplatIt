@@ -2,16 +2,20 @@ import os
 import torch
 import cv2
 import PIL
-import open3d
+# import open3d
 import shutil
 from matplotlib import pyplot as plt 
 import numpy as np
 class GSPLAT:
     #Initialize the class, we need to take in the recording path from the user and a destination path in which the output file
     #will be placed
-    def __init__(self, recording_path, destination_path):
+    def __init__(self, recording_path, destination_path = None):
+        print("hello")
         self.path = recording_path
-        self.dest = destination_path
+        if destination_path == None:
+            self.dest = os.getcwd()
+        else:
+            self.dest = destination_path
         self.blacklist = ["frame_extract","point_cloud_gen", "gaussians", "rast"]
         self.pc = ''
         self.depthMaps = []
@@ -19,24 +23,28 @@ class GSPLAT:
     #Check if the method that is being used is internal or not
     #If it is internal, raise an error
     #Else allow the user to call the method
-    def __getattribute__(self, name):
-        if name in self.blacklist:
-            raise AttributeError(f"{name} is not accessible!")
-        else:
-            return super(GSPLAT, self).__getattribute__(name)
+    # def __getattribute__(self, name):
+    #     if name in self.blacklist:
+    #         raise AttributeError(f"{name} is not accessible!")
+    #     else:
+    #         return super(GSPLAT, self).__getattribute__(name)
 
     #Extract frames from the video
     def frame_extract(self):
         frame_data = cv2.VideoCapture(self.path)
         extracted, image = frame_data.read()
         count = 0
-
-        while extracted:
-            cv2.imwrite("frame%d.jpg" % count, image) #will create a folder called frames to save each image to
-            print('Read next frame: ', extracted)
+        while True:
+            if not extracted:
+                break
+            os.mkdir('frames') #make frames directory
+            os.chdir('frames') #change to the new directory
+            cv2.imwrite("frame%d.jpg" % count, image) #write to folder
+            print('Read frame: ', count, extracted)
             count += 1
-            depth_map = self.frame_to_depth(image)
-            self.point_cloud_gen(depth_map) #Generate a point cloud for every map
+            os.chdir('..') #get out of directory
+            # depth_map = self.frame_to_depth(image)
+            # self.point_cloud_gen(depth_map) #Generate a point cloud for every map
         frame_data.release()
     
     def frame_to_depth(self):
@@ -93,4 +101,5 @@ class GSPLAT:
     #Generate output file
     def generate(self):
         pass
+
 
