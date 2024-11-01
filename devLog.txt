@@ -57,9 +57,14 @@ Day 7
 No test video yet, should be the next step before starting point cloud generation. Looking into matplotlib to visualize the depth map. Depth maps are
 all numpy arrays so matplotlib should be able to easily plot it.
 
-
-
 Day 8
+-----
+
+Finally recorded a test video. Running frame extraction function to test. Frames are extracting but not exactly the way I want. Need to work on that.
+>>>>>>> 1aab57e47e7e98cdbc8f437d4d03ce77d4d92ffc
+
+
+Day 9
 -----
 
 Frame extaction is successful. Made the function print "Attempting to read all frames" and "Read all frames successfully" instead of "Read frame {count}".
