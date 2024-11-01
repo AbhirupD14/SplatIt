@@ -56,3 +56,10 @@ Day 7
 
 No test video yet, should be the next step before starting point cloud generation. Looking into matplotlib to visualize the depth map. Depth maps are
 all numpy arrays so matplotlib should be able to easily plot it.
+
+
+
+Day 8
+-----
+
+Frame extaction is successful. Made the function print "Attempting to read all frames" and "Read all frames successfully" instead of "Read frame {count}".

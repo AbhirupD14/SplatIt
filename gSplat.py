@@ -2,7 +2,6 @@ import os
 import torch
 import cv2
 import PIL
-# import open3d
 import shutil
 from matplotlib import pyplot as plt 
 import numpy as np
@@ -34,22 +33,25 @@ class GSPLAT:
         frame_data = cv2.VideoCapture(self.path)
         extracted, image = frame_data.read()
         count = 0
-        while True:
+        frames = frame_data.get(cv2.CAP_PROP_FRAME_COUNT)  
+        os.mkdir('frames') #make frames directory
+        os.chdir('frames') #change to the new director
+        print('ATTEMPTING TO READ ALL FRAMES...')
+        while count < frames+1:
             if not extracted:
                 break
-            os.mkdir('frames') #make frames directory
-            os.chdir('frames') #change to the new directory
             cv2.imwrite("frame%d.jpg" % count, image) #write to folder
-            print('Read frame: ', count, extracted)
             count += 1
-            os.chdir('..') #get out of directory
             # depth_map = self.frame_to_depth(image)
             # self.point_cloud_gen(depth_map) #Generate a point cloud for every map
+        os.chdir('..') #get out of directory
         frame_data.release()
+        print("READ ALL FRAMES SUCCESSFULLY")
+
     
     def frame_to_depth(self):
         # List all frame files in the /frames directory
-        all_frames = os.listdir('/frames')
+        all_frames = os.listdir('frames')
 
         # Check if a GPU is available, if so use it else use CPU
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -78,15 +80,15 @@ class GSPLAT:
             depth_map = (depth_map - depth_map.min()) / (depth_map.max() - depth_map.min())  # Normalize
 
             self.depthMaps.append(depth_map)
-
+            print(len(self.depthMaps))
             #Delete the frames directory as we won't need them anymore
             if os.path.exists('/frames'):
                 shutil.rmtree('/frames')
     
         #Generate the point cloud
     def point_cloud_gen(self):
-        # self.frame_extract()
-        # self.frame_to_depth()
+        self.frame_extract()
+        self.frame_to_depth()
         pass
 
             
