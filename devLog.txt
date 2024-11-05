@@ -68,3 +68,9 @@ Day 9
 -----
 
 Frame extaction is successful. Made the function print "Attempting to read all frames" and "Read all frames successfully" instead of "Read frame {count}".
+
+Day 10
+-------
+
+Depth map issue should be resolved. Need to add some kind of warning catch for a torch warning. The warning does not impact what I am using it for. 
+Depth maps should be being created correctly. Need to implement a test suite using matplotlib in order to visualize the depth map.

@@ -5,11 +5,11 @@ import PIL
 import shutil
 from matplotlib import pyplot as plt 
 import numpy as np
+import torchvision.transforms as transforms 
 class GSPLAT:
     #Initialize the class, we need to take in the recording path from the user and a destination path in which the output file
     #will be placed
     def __init__(self, recording_path, destination_path = None):
-        print("hello")
         self.path = recording_path
         if destination_path == None:
             self.dest = os.getcwd()
@@ -52,7 +52,7 @@ class GSPLAT:
     def frame_to_depth(self):
         # List all frame files in the /frames directory
         all_frames = os.listdir('frames')
-
+        
         # Check if a GPU is available, if so use it else use CPU
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -65,10 +65,16 @@ class GSPLAT:
 
         for frame_file in all_frames:
             # Load each frame as an image
-            frame_path = os.path.join('/frames', frame_file)
+            frame_path = os.path.join('frames', frame_file)
             input_img = PIL.Image.open(frame_path)
 
             # Apply transformation and prepare input tensor
+            transform = transforms.Compose([
+                transforms.Resize((384, 384)),
+                transforms.ToTensor(),        # Converts PIL image to a tensor and scales pixel values to [0, 1]
+                transforms.Lambda(lambda img: img / 255.0),  # Scale again if needed, though ToTensor() already scales
+            ])
+
             input_img = transform(input_img).unsqueeze(0).to(device)
 
             # Make depth prediction
@@ -81,9 +87,9 @@ class GSPLAT:
 
             self.depthMaps.append(depth_map)
             print(len(self.depthMaps))
-            #Delete the frames directory as we won't need them anymore
-            if os.path.exists('/frames'):
-                shutil.rmtree('/frames')
+        #Delete the frames directory as we won't need them anymore
+        if os.path.exists('frames'):
+            shutil.rmtree('frames')
     
         #Generate the point cloud
     def point_cloud_gen(self):
