@@ -74,3 +74,10 @@ Day 10
 
 Depth map issue should be resolved. Need to add some kind of warning catch for a torch warning. The warning does not impact what I am using it for. 
 Depth maps should be being created correctly. Need to implement a test suite using matplotlib in order to visualize the depth map.
+
+Day 11
+------
+
+Added a visualization portion to main.py that will help me look at the depth maps. Fixing the frame extraction function since the loop was not 
+actually looping over every frame but rather the same frame. That issue is now fixed but now need to implement frame selection so that I am processing
+every 10th frame and not every frame. Then I can check the depth map using matplotlib.

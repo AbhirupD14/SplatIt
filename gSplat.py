@@ -30,20 +30,20 @@ class GSPLAT:
 
     #Extract frames from the video
     def frame_extract(self):
-        frame_data = cv2.VideoCapture(self.path)
-        extracted, image = frame_data.read()
         count = 0
+        frame_data = cv2.VideoCapture(self.path)
         frames = frame_data.get(cv2.CAP_PROP_FRAME_COUNT)  
         os.mkdir('frames') #make frames directory
         os.chdir('frames') #change to the new director
         print('ATTEMPTING TO READ ALL FRAMES...')
-        while count < frames+1:
+        while count < frames + 1:
+            extracted, image = frame_data.read()
             if not extracted:
                 break
             cv2.imwrite("frame%d.jpg" % count, image) #write to folder
-            count += 1
             # depth_map = self.frame_to_depth(image)
             # self.point_cloud_gen(depth_map) #Generate a point cloud for every map
+            count += 1
         os.chdir('..') #get out of directory
         frame_data.release()
         print("READ ALL FRAMES SUCCESSFULLY")
@@ -62,8 +62,10 @@ class GSPLAT:
 
         # Load MiDaS transformation for preprocessing
         transform = torch.hub.load("intel-isl/MiDaS", "transforms").default_transform
-
-        for frame_file in all_frames:
+        frameSampleCounter = 0
+        #We are going to create a depth map from every 10th frame
+        for i in range (len(all_frames),1,10):
+            frame_file = all_frames[i]
             # Load each frame as an image
             frame_path = os.path.join('frames', frame_file)
             input_img = PIL.Image.open(frame_path)
@@ -86,7 +88,6 @@ class GSPLAT:
             depth_map = (depth_map - depth_map.min()) / (depth_map.max() - depth_map.min())  # Normalize
 
             self.depthMaps.append(depth_map)
-            print(len(self.depthMaps))
         #Delete the frames directory as we won't need them anymore
         if os.path.exists('frames'):
             shutil.rmtree('frames')
@@ -109,5 +110,8 @@ class GSPLAT:
     #Generate output file
     def generate(self):
         pass
+
+    def getDepthMap(self):
+        return self.depthMaps
 
 
