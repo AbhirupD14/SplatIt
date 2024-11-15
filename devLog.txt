@@ -81,3 +81,8 @@ Day 11
 Added a visualization portion to main.py that will help me look at the depth maps. Fixing the frame extraction function since the loop was not 
 actually looping over every frame but rather the same frame. That issue is now fixed but now need to implement frame selection so that I am processing
 every 10th frame and not every frame. Then I can check the depth map using matplotlib.
+
+Day 12
+------
+Frame extraction done. Sampling every 10th frame works and is much faster than before. Now working on depth map visualization. Depth map visualization was
+successful for the very first frame.
