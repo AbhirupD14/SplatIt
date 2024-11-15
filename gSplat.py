@@ -2,10 +2,8 @@ import os
 import torch
 import cv2
 import PIL
-import shutil
-from matplotlib import pyplot as plt 
-import numpy as np
 import torchvision.transforms as transforms 
+# import open3d as o3d
 class GSPLAT:
     #Initialize the class, we need to take in the recording path from the user and a destination path in which the output file
     #will be placed
@@ -30,6 +28,8 @@ class GSPLAT:
 
     #Extract frames from the video
     def frame_extract(self):
+        if os.path.isdir('frames'):
+            return
         count = 0
         frame_data = cv2.VideoCapture(self.path)
         frames = frame_data.get(cv2.CAP_PROP_FRAME_COUNT)  
@@ -94,8 +94,35 @@ class GSPLAT:
     
         #Generate the point cloud
     def point_cloud_gen(self):
-        self.frame_extract()
-        self.frame_to_depth()
+        # self.frame_extract()
+        # self.frame_to_depth()
+        # # Load the depth map
+        # depth_map = cv2.imread(self.depthMaps[0], cv2.IMREAD_UNCHANGED)
+
+        # # Define image size
+        # height, width = depth_map.shape
+        # fov = 60  # Assumed field of view in degrees
+        # fx = fy = width / (2 * np.tan(np.deg2rad(fov) / 2))  # Focal length
+        # cx, cy = width / 2, height / 2  # Camera center
+
+        # # Initialize point cloud
+        # points = []
+
+        # # Generate 3D points
+        # for v in range(height):
+        #     for u in range(width):
+        #         z = depth_map[v, u] / 1000  # Convert depth value to meters
+        #         if z == 0:  # Skip invalid depth
+        #             continue
+        #         x = (u - cx) * z / fx
+        #         y = (v - cy) * z / fy
+        #         points.append([x, y, z])
+
+        # # Create Open3D point cloud object
+        # point_cloud = o3d.geometry.PointCloud()
+        # point_cloud.points = o3d.utility.Vector3dVector(np.array(points))
+
+        # return point_cloud
         pass
 
             
