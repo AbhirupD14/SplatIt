@@ -3,6 +3,7 @@ import torch
 import cv2
 import PIL
 import torchvision.transforms as transforms 
+import open3d as o3d
 # import open3d as o3d
 class GSPLAT:
     #Initialize the class, we need to take in the recording path from the user and a destination path in which the output file
@@ -124,7 +125,6 @@ class GSPLAT:
 
         # return point_cloud
         pass
-
             
     #Generate gaussian splats from the point cloud
     def gaussians(self):
